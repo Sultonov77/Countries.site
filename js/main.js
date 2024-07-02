@@ -5,6 +5,7 @@ let likeList = document.querySelector(".like-list");
 let saveList = document.querySelector(".save-list");
 let likeCount = document.querySelector(".like-count");
 let saveCount = document.querySelector(".save-count");
+let elModal = document.querySelector(".modal");
 // cards
 function allCountries(arr, list) {
   list.innerHTML = " ";
@@ -57,6 +58,7 @@ function allCountries(arr, list) {
       "text-md  flex border-slate-700 border rounded-md px-3 py-1 hover:bg-blue-900 hover:text-white transition-all duration-500";
 
     elMore.textContent = "More info";
+    elMore.id = value.id;
 
     elItem.append(
       elImg,
@@ -86,9 +88,32 @@ function allCountries(arr, list) {
         (item) => item.isSave == true
       ).length;
     });
+    elMore.addEventListener("click", (e) => {
+      const findObj = countrys.find((item) => item.id == e.target.id);
+      elModal.classList.remove("hidden");
+      elModal.innerHTML = `
+   <div class="flex items-center justify-between">
+      <img src=${findObj.flag} width="300" height="280"/>
+      <div>
+        <h2 class="scale-125">${findObj.name}</h2>
+        <h2 class="scale-125">${findObj.capital}</h2>
+        <h2 class="scale-125">Population:${findObj.population}</h2>
+        <h2 class="scale-125">ID:${findObj.id}</h2>
+      </div>
+      <button  id="hide-btn" class="absolute top-0 right-0 border rounded-md top-2 right-2">
+      Exit
+       </button>
+    </div> `;
+    });
   });
 }
 allCountries(countrys, countryList);
+// modal page
+elModal.addEventListener("click", function (e) {
+  if (e.target.matches("#hide-btn")) {
+    elModal.classList.add("hidden");
+  }
+});
 // liked countries list
 likeList.addEventListener("click", () => {
   const likedList = countrys.filter((item) => item.isLike == true);
